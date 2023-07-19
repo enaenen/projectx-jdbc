@@ -10,7 +10,7 @@ WORKDIR		/
 
 RUN			mkdir -p /var/run/mysqld
 RUN			chown -R mysql:mysql /var/run/mysqld
-RUN			chmod 655 /var/run/mysqld
+RUN			chmod 777 /var/run/mysqld
 
 RUN 		mkdir -p /var/lib/mysql
 RUN			chown -R mysql:mysql /var/lib/mysql
@@ -20,7 +20,7 @@ RUN			mkdir -p /database/credentials
 
 COPY		./db/ /database/
 
-RUN			chmod 655 /database/init.sh
+RUN			chmod 777 /database/init.sh
 
 ENTRYPOINT	["bash", "/database/init.sh"]
 
