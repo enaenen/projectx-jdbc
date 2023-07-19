@@ -11,6 +11,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.SQLIntegrityConstraintViolationException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.NoSuchElementException;
 
 import lombok.extern.slf4j.Slf4j;
@@ -77,7 +79,7 @@ public class ItemRepository {
 	}
 
 	public Item findByName(String itemName) throws SQLException {
-		String sql = "select * from item where name = ?";
+		String sql = "select * from item where name LIKE ?";
 
 		Connection con = null;
 		PreparedStatement pstmt = null;
@@ -86,7 +88,7 @@ public class ItemRepository {
 		try {
 			con = getConnection();
 			pstmt = con.prepareStatement(sql);
-			pstmt.setString(1, itemName);
+			pstmt.setString(1, "%" + itemName + "%");
 
 			rs = pstmt.executeQuery();
 			if (rs.next()) {
@@ -96,6 +98,35 @@ public class ItemRepository {
 			} else {
 				throw new NoSuchElementException("Item not found itemName = " + itemName);
 			}
+		} catch (SQLException e) {
+			log.error("db error", e);
+			throw e;
+		} finally {
+			close(con, pstmt, rs);
+		}
+	}
+
+	public List<Item> findAllByName(String itemName) throws SQLException {
+		String sql = "select * from item where name LIKE ?";
+
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+
+		try {
+			List<Item> items = new ArrayList<>();
+			con = getConnection();
+			pstmt = con.prepareStatement(sql);
+			pstmt.setString(1, "%" + itemName + "%");
+
+			rs = pstmt.executeQuery();
+			while(rs.next()){
+				Item item = Item.of(rs.getString("name"), rs.getInt("price"), rs.getInt("stock"));
+				item.setCode(rs.getInt("code"));
+				items.add(item);
+			}
+			return items;
+
 		} catch (SQLException e) {
 			log.error("db error", e);
 			throw e;

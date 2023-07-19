@@ -7,11 +7,10 @@ import hello.jdbc.exception.ExceptionStatus;
 import static hello.jdbc.Main.*;
 
 public class ProductInsertV1 {
-    public Status insertItem() {
+    public Status insertItem(Status currentStatus) {
         int price = 0;
         int stock = 0;
 
-        Status currentStatus = Status.ADDNAME;
         String name = null;
 
         Item newItem;
@@ -66,8 +65,8 @@ public class ProductInsertV1 {
                     try {
                         newItem = Item.of(name, price, stock);
                         Item savedItem = itemService.saveItem(newItem);
-                        System.out.println("saved item info : " + savedItem);
-                        return Status.MENU;
+                        currentStatus = Status.MENU;
+                        return currentStatus;
                     } catch (DomainException e) {
                         if (e.getStatus().equals(ExceptionStatus.PRODUCT_NAME_INVALID)) {
                             System.out.println("[상품 이름이 잘못되었습니다.]");
@@ -81,7 +80,7 @@ public class ProductInsertV1 {
                         }
                     }
                 case MENU:
-                    break;
+                    return currentStatus;
             }
 
         }

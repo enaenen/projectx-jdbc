@@ -5,6 +5,7 @@ import hello.jdbc.domain.Orders;
 import hello.jdbc.exception.DBException;
 import hello.jdbc.repository.ItemRepository;
 import hello.jdbc.repository.OrdersRepository;
+import java.util.List;
 import java.util.NoSuchElementException;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
@@ -18,7 +19,6 @@ public class ItemService {
 
 	public Item saveItem(Item item) {
 		try {
-			itemRepository.save(item);
 			return itemRepository.save(item);
 		} catch (SQLException e) {
 			System.out.println("error = " + e);
@@ -30,6 +30,21 @@ public class ItemService {
 		try {
 			if (StringUtils.hasText(itemName)) {
 				return itemRepository.findByName(itemName);
+			} else {
+				return null;
+			}
+		} catch (NoSuchElementException e) {
+			return null;
+		} catch (SQLException e) {
+			System.out.println("error = " + e);
+			return null;
+		}
+	}
+
+	public List<Item> searchAllItem(String itemName) {
+		try {
+			if (StringUtils.hasText(itemName)) {
+				return itemRepository.findAllByName(itemName);
 			} else {
 				return null;
 			}

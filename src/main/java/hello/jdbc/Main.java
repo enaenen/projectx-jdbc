@@ -28,12 +28,16 @@ public class Main {
 
             switch (status) {
                 case ADDNAME:
+                    status = productInsert.insertItem(Status.ADDNAME);
+                    break;
                 case ADDPRICE:
+                    status = productInsert.insertItem(Status.ADDPRICE);
+                    break;
                 case ADDSTOCK:
-                    status = productInsert.insertItem();
+                    status = productInsert.insertItem(Status.ADDSTOCK);
                     break;
                 case SEARCH:
-                    status = productSearch.itemSearch();
+                    status = productSearch.itemAllSearch();
                     break;
                 case DELETE:
                     status = productDelete.itemDelete();
