@@ -23,7 +23,7 @@ else
 	# Import database
 	echo "Import database"
 	echo -e "${GREEN} mysql -u$MARIADB_USER -p$MARIADB_PASSWORD $MARIADB_DATABASE < /database/scheme.sql ${RESET}"
-	mysql -u$MARIADB_USER -p$MARIADB_PASSWORD $MARIADB_DATABASE < /database/scheme.sql
+	mysql -u$MARIADB_USER -p$MARIADB_PASSWORD $MARIADB_DATABASE < /database/projectx.sql
 fi
 
 service mysql stop
